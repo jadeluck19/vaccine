@@ -1,0 +1,1 @@
+cmd_/home/targetdevice/workspace/pssa/lkm/pssa_lkm.o := ld -m elf_x86_64   -r -o /home/targetdevice/workspace/pssa/lkm/pssa_lkm.o /home/targetdevice/workspace/pssa/lkm/pssal_filter.o /home/targetdevice/workspace/pssa/lkm/pss_ksock.o /home/targetdevice/workspace/pssa/lkm/pss_hash.o 
