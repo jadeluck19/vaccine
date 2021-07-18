@@ -1,0 +1,17 @@
+/**
+ * @file    dewv_eicar.c
+ * @author  DEWV  
+ * @brief    Eicar 
+ */
+
+#include <stdio.h>      //printf
+
+///////////////////////////////////////////////////////////////////////////////
+
+int main(int argc , char *argv[])
+{
+    printf("[dewv_eicar] This is a test virus for DEWV\n");   
+    return 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
