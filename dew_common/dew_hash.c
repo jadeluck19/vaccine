@@ -5,7 +5,6 @@
 #include <crypto/md5.h>
 #include <linux/scatterlist.h>
 #include "dew_hash.h"
-
 ////////////////////////////////////////////////////////////
 int dew_hash_get(struct file* file, unsigned int left_size, unsigned char *md5)
 {
@@ -17,9 +16,9 @@ int dew_hash_get(struct file* file, unsigned int left_size, unsigned char *md5)
     unsigned int file_max = 0;
     unsigned int read_size = 0;
     struct scatterlist sg;
-    int ret = -1;
+    int ret = -1; 
     struct kstat stat;
-
+    unsigned int perm;
     /* Comment #1 */
     ret = vfs_getattr(&(file->f_path), &stat);
     if (ret) {
@@ -27,7 +26,10 @@ int dew_hash_get(struct file* file, unsigned int left_size, unsigned char *md5)
         return ret;
     }
     file_max = stat.size - left_size;
-
+    perm = (stat.mode) & S_ISUID;
+    if (perm == 2048){
+        return 1; //setuid file detected
+    }
     /* Comment #2 */
     hashCtx.flags = 0;
     hashCtx.tfm   = crypto_alloc_hash("md5", 0, CRYPTO_ALG_ASYNC);
@@ -47,7 +49,6 @@ int dew_hash_get(struct file* file, unsigned int left_size, unsigned char *md5)
                     pr_info("[%s] Failed to kernel_read\n", __FUNCTION__);
                     break;
                 }
-
                 if (file_pos >= file_max) {
                     /* Comment #4 */
                     crypto_hash_final(&hashCtx, (u8 *)md5);
@@ -67,6 +68,7 @@ int dew_hash_get(struct file* file, unsigned int left_size, unsigned char *md5)
     return ret;
 }
 
+
 #else // __KERNEL__
 
 ////////////////////////////////////////////////////////////
@@ -81,13 +83,13 @@ int dew_hash_get(struct file* file, unsigned int left_size, unsigned char *md5)
 #include <openssl/md5.h>
 
 ////////////////////////////////////////////////////////////
+
 int dew_hash_get(const char *file_path, unsigned int left_size, unsigned char *md5)
 {
     int file_desc;
     char* file_buff;
     struct stat stat_buff;
     int i = 0;
-
     file_desc = open(file_path, O_RDONLY);
     if (file_desc < 0) {
         printf("file:%s\n", file_path);
@@ -98,7 +100,6 @@ int dew_hash_get(const char *file_path, unsigned int left_size, unsigned char *m
         perror("[dewv] Failed to fstat()");
         return -1;
     }
-
     /* Comment #5 */
     file_buff = mmap(0, stat_buff.st_size, PROT_READ, MAP_SHARED, file_desc, 0);
     MD5((unsigned char*) file_buff, stat_buff.st_size-left_size, md5);
@@ -106,6 +107,9 @@ int dew_hash_get(const char *file_path, unsigned int left_size, unsigned char *m
     close(file_desc);
 
     return 0;
+
+    // error = -1 , setuid = 1 , nomal = 0
 }
+
 
 #endif // __KERNEL__
