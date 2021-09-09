@@ -45,7 +45,7 @@ void MainWindow::on_startButton_clicked()
     connect(timer, &QTimer::timeout, this, &MainWindow::onTimeOut);
     timer->start();
     char exec[100];
-    sprintf(exec, "echo /* root password*/ | sudo -S ~/workspace/UI/test_ui/test.sh");
+    sprintf(exec, "echo rs34001# | sudo -S ~/workspace/UI/pic/test.sh");
     system(exec);
 }
 
