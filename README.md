@@ -36,7 +36,7 @@ vaccine/UI/VertTab/mainWindow.cpp : change line 48 /* your root pw */
 
 # video link
 
-## 1. Deonstration video
+## 1. Demonstration video
 
 no UI in this video.  
 https://youtu.be/g-Z35lj_ngU
