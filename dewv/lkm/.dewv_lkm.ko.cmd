@@ -1,1 +1,0 @@
-cmd_/home/targetdevice/workspace/dewv/lkm/dewv_lkm.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/targetdevice/workspace/dewv/lkm/dewv_lkm.ko /home/targetdevice/workspace/dewv/lkm/dewv_lkm.o /home/targetdevice/workspace/dewv/lkm/dewv_lkm.mod.o
